@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Triangle</string>
+    <string name="position_one_to_drag">Position One to_Drag</string>
+</resources>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SubActivity">
+
+    <com.aximsoft.triangle.AnnotationView
+        android:id="@+id/parentView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:id="@+id/bottom"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/b_line"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="line"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/b_triAngle"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bottom" />
+
+    <Button
+        android:id="@+id/b_triAngle"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="Tri Angle"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/b_circle"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/b_line"
+        app:layout_constraintTop_toTopOf="@+id/b_line" />
+
+    <Button
+        android:id="@+id/b_circle"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="Circle"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/b_square"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/b_triAngle"
+        app:layout_constraintTop_toTopOf="@+id/b_line" />
+
+    <Button
+        android:id="@+id/b_square"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="Square"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/b_freeDraw"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/b_circle"
+        app:layout_constraintTop_toTopOf="@+id/b_line" />
+
+    <Button
+        android:id="@+id/b_freeDraw"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="Free Draw"
+        android:textSize="10sp"
+        app:layout_constraintTop_toTopOf="@+id/b_line"
+        app:layout_constraintEnd_toStartOf="@+id/b_text"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/b_square"
+         />
+
+    <Button
+        android:id="@+id/b_text"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="Text"
+        android:textSize="10sp"
+        app:layout_constraintTop_toTopOf="@+id/b_line"
+        app:layout_constraintEnd_toStartOf="@+id/b_undo"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/b_freeDraw"
+         />
+
+    <Button
+        android:id="@+id/b_undo"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="Undo"
+        android:textSize="10sp"
+        app:layout_constraintTop_toTopOf="@+id/b_line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/b_text" />
+</android.support.constraint.ConstraintLayout>
