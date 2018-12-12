@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LaneVisionDrawView">
+        <attr name="tri_circleSize" format="dimension" />
+        <attr name="tri_lineWidth" format="dimension" />
+        <attr name="tri_angleTextSize" format="dimension" />
+        <attr name="tri_circleColor" format="color" />
+        <attr name="tri_circleDrawable" format="integer" />
+        <attr name="tri_lineColor" format="color" />
+        <attr name="tri_angleTextColor" format="color" />
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="drawLineWidth">2dp</dimen>
+    <dimen name="drawCircleWidth">20dp</dimen>
+    <dimen name="drawTextSize">8sp</dimen>
+</resources>
