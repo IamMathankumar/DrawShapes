@@ -1,3 +1,9 @@
+/*
+ * Created by Mathankumar K On 1/9/19 11:54 AM
+ * Copyright (c) Aximsoft 2019.
+ * All rights reserved.
+ */
+
 package com.aximsoft.triangle;
 
 import android.annotation.SuppressLint;
@@ -21,6 +27,7 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+@SuppressWarnings("unused")
 @SuppressLint("ClickableViewAccessibility")
 public class DrawLineView extends FrameLayout implements OnDragTouchListener.OnDragActionListener {
 
@@ -30,11 +37,14 @@ public class DrawLineView extends FrameLayout implements OnDragTouchListener.OnD
     View drawTriAngle;
     ConstraintLayout parentView;
     View parent;
+    private float startingX = 0f, startingY = 0f;
 
-    public DrawLineView(Context context, View parent) {
+    public DrawLineView(Context context, View parent, int lineColor, float x, float y) {
         super(context);
         this.parent = parent;
-        init();
+        this.startingX = x;
+        this.startingY = y;
+        init(lineColor);
     }
 
 
@@ -42,14 +52,13 @@ public class DrawLineView extends FrameLayout implements OnDragTouchListener.OnD
         super(context, attrs);
         initView(context, attrs);
 
-
     }
 
     int circleSize = 60, lineWidthSize = 10, textSize = 15;
     int circleColor = Color.BLACK, lineColor = Color.GRAY, textColor = Color.BLACK;
 
     private void initView(Context context, AttributeSet attrs) {
-        init();
+        init(Color.YELLOW);
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
                 R.styleable.LaneVisionDrawView,
@@ -62,7 +71,7 @@ public class DrawLineView extends FrameLayout implements OnDragTouchListener.OnD
             lineColor = a.getColor(R.styleable.LaneVisionDrawView_tri_lineColor, ContextCompat.getColor(getContext(),R.color.yellow));
             textColor = a.getColor(R.styleable.LaneVisionDrawView_tri_angleTextColor, ContextCompat.getColor(getContext(),R.color.yellow));
 
-           setColorsAndSize();
+            setColorsAndSize();
 
           /*  if (circleDrawable == null) {
                 setCircleImageTintColor(circleColor);
@@ -99,7 +108,7 @@ public class DrawLineView extends FrameLayout implements OnDragTouchListener.OnD
         requestLayout();
     }
 
-    public void setCircleImageTintColor(int circleColor) {
+    public void setCircleImageTintColor() {
         //   ImageViewCompat.setImageTintList(positionOne, ColorStateList.valueOf(circleColor));
         //    ImageViewCompat.setImageTintList(positionTwo, ColorStateList.valueOf(circleColor));
         //    ImageViewCompat.setImageTintList(positionThree, ColorStateList.valueOf(circleColor));
@@ -173,12 +182,12 @@ public class DrawLineView extends FrameLayout implements OnDragTouchListener.OnD
         return new RectF(location[0], location[1], location[0] + view.getMeasuredWidth(), location[1] + view.getMeasuredHeight());
     }
 
-    private void init() {
+    private void init(int lineColor) {
         circleSize = getResources().getDimensionPixelOffset(R.dimen.drawCircleWidth);
         lineWidthSize = getResources().getDimensionPixelOffset(R.dimen.drawLineWidth);
         textSize = getResources().getDimensionPixelOffset(R.dimen.drawTextSize);
         circleColor = ContextCompat.getColor(getContext(),R.color.orange);
-        lineColor = ContextCompat.getColor(getContext(),R.color.yellow);
+        this.lineColor = lineColor;
         textColor = ContextCompat.getColor(getContext(),R.color.yellow);
 
         LayoutInflater.from(getContext()).inflate(R.layout.draw_line_view, this);
@@ -216,6 +225,7 @@ public class DrawLineView extends FrameLayout implements OnDragTouchListener.OnD
             @Override
             public void onGlobalLayout() {
                 positionOne.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                setViewSize(startingX, startingY);
                 draw();
                 refresh();
                 setColorsAndSize();
@@ -224,12 +234,31 @@ public class DrawLineView extends FrameLayout implements OnDragTouchListener.OnD
 
     }
 
+    int addValue = 60;
+    int addValueY = 20;
 
-   private void setColorsAndSize(){
+    public void setViewSize(float x, float y) {
+        positionOne.setX(x - addValue);
+        positionOne.setY(y - addValueY);
+        positionThree.setX(x + addValue);
+        positionThree.setY(y - addValueY);
+    }
+
+    public void movingView(MotionEvent event) {
+        positionThree.setX(event.getX());
+        positionThree.setY(event.getY());
+        onDragging(positionThree);
+        draw();
+        refresh();
+    }
+
+
+
+    private void setColorsAndSize() {
         setCircleSize(circleSize);
         setLineSize(lineWidthSize);
         setLineColor(lineColor);
-        setCircleImageTintColor(circleColor);
+        setCircleImageTintColor();
     }
 
 

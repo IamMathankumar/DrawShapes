@@ -1,3 +1,9 @@
+/*
+ * Created by Mathankumar K On 1/9/19 11:54 AM
+ * Copyright (c) Aximsoft 2019.
+ * All rights reserved.
+ */
+
 package com.aximsoft.triangle;
 
 import android.annotation.SuppressLint;
@@ -21,6 +27,7 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+@SuppressWarnings("unused")
 @SuppressLint("ClickableViewAccessibility")
 public class DrawSquareView extends FrameLayout implements OnDragTouchListener.OnDragActionListener {
 
@@ -30,12 +37,14 @@ public class DrawSquareView extends FrameLayout implements OnDragTouchListener.O
     View drawTriAngle;
     ConstraintLayout parentView;
     View parent;
+    private float startingX = 0f, startingY = 0f;
 
-
-    public DrawSquareView(Context context, View parent) {
+    public DrawSquareView(Context context, View parent, int squareColor, float x, float y) {
         super(context);
         this.parent = parent;
-        init();
+        startingX = x;
+        startingY = y;
+        init(squareColor);
     }
 
 
@@ -50,7 +59,7 @@ public class DrawSquareView extends FrameLayout implements OnDragTouchListener.O
     int circleColor = Color.BLACK, lineColor = Color.GRAY, textColor = Color.BLACK;
 
     private void initView(Context context, AttributeSet attrs) {
-        init();
+        init(Color.GREEN);
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
                 R.styleable.LaneVisionDrawView,
@@ -178,15 +187,14 @@ public class DrawSquareView extends FrameLayout implements OnDragTouchListener.O
         return new RectF(location[0], location[1], location[0] + view.getMeasuredWidth(), location[1] + view.getMeasuredHeight());
     }
 
-    private void init() {
+    private void init(int lineColor) {
         circleSize = getResources().getDimensionPixelOffset(R.dimen.drawCircleWidth);
         lineWidthSize = getResources().getDimensionPixelOffset(R.dimen.drawLineWidth);
         textSize = getResources().getDimensionPixelOffset(R.dimen.drawTextSize);
         circleColor = ContextCompat.getColor(getContext(), R.color.orange);
-        lineColor = ContextCompat.getColor(getContext(), R.color.yellow);
         textColor = ContextCompat.getColor(getContext(), R.color.yellow);
 
-
+        this.lineColor = lineColor;
         LayoutInflater.from(getContext()).inflate(R.layout.draw_square_view, this);
         positionOne = findViewById(R.id.positionOne);
         positionThree = findViewById(R.id.positionThree);
@@ -201,8 +209,6 @@ public class DrawSquareView extends FrameLayout implements OnDragTouchListener.O
         drawTriAngle = findViewById(R.id.drawTriAngle);
 
 
-        setColorsAndSize();
-
         onDragTouchListenerOne = new OnDragTouchListener(positionOne, parent, this);
         onDragTouchListenerTwo = new OnDragTouchListener(positionTwo, this.parent, this);
         onDragTouchListenerThree = new OnDragTouchListener(positionThree, this.parent, this);
@@ -215,7 +221,6 @@ public class DrawSquareView extends FrameLayout implements OnDragTouchListener.O
         positionThree.setOnTouchListener(onDragTouchListenerThree);
         positionFour.setOnTouchListener(onDragTouchListenerFour);
         // showAngle.setOnTouchListener(onDragTouchListenerAngle);
-
         drawTriAngle.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
@@ -230,40 +235,41 @@ public class DrawSquareView extends FrameLayout implements OnDragTouchListener.O
             }
         });    // drawTwo.draw();
         //  drawOne.draw();
-
+        setColorsAndSize();
         positionOne.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 positionOne.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                setViewSize(startingX, startingY);
                 draw();
-                setColorsAndSize();
                 refresh();
             }
         });
 
     }
 
-
+float two = 2f;
     private void draw() {
-        drawOne.drawLine(positionOne.getX() + positionOne.getWidth() / 2,
-                positionOne.getY() + positionOne.getHeight() / 2,
-                positionTwo.getX() + positionTwo.getWidth() / 2,
-                positionTwo.getY() + positionTwo.getHeight() / 2);
+        drawOne.drawLine(positionOne.getX() + positionOne.getWidth() / two,
+                positionOne.getY() + positionOne.getHeight() / two,
+                positionTwo.getX() + positionTwo.getWidth() / two,
+                positionTwo.getY() + positionTwo.getHeight() / two);
 
-        drawTwo.drawLine(positionOne.getX() + positionOne.getWidth() / 2,
-                positionOne.getY() + positionOne.getHeight() / 2,
-                positionThree.getX() + positionThree.getWidth() / 2,
-                positionThree.getY() + positionThree.getHeight() / 2);
+        drawTwo.drawLine(positionOne.getX() + positionOne.getWidth() / two,
+                positionOne.getY() + positionOne.getHeight() / two,
+                positionThree.getX() + positionThree.getWidth() / two,
+                positionThree.getY() + positionThree.getHeight() / two);
 
-        drawThree.drawLine(positionTwo.getX() + positionTwo.getWidth() / 2,
-                positionTwo.getY() + positionTwo.getHeight() / 2,
-                positionFour.getX() + positionFour.getWidth() / 2,
-                positionFour.getY() + positionFour.getHeight() / 2);
+        drawThree.drawLine(positionTwo.getX() + positionTwo.getWidth() / two,
+                positionTwo.getY() + positionTwo.getHeight() / two,
+                positionFour.getX() + positionFour.getWidth() / two,
+                positionFour.getY() + positionFour.getHeight() / two);
 
-        drawFour.drawLine(positionFour.getX() + positionFour.getWidth() / 2,
-                positionFour.getY() + positionFour.getHeight() / 2,
-                positionThree.getX() + positionThree.getWidth() / 2,
-                positionThree.getY() + positionThree.getHeight() / 2);
+        drawFour.drawLine(positionFour.getX() + positionFour.getWidth() / two,
+                positionFour.getY() + positionFour.getHeight() / two,
+                positionThree.getX() + positionThree.getWidth() / two,
+                positionThree.getY() + positionThree.getHeight() / two);
         rect();
 
 
@@ -277,21 +283,16 @@ public class DrawSquareView extends FrameLayout implements OnDragTouchListener.O
                 Math.abs(positionFour.getX()) : Math.abs(positionTwo.getX());
 
 
-
         float maxX1 = Math.abs(positionOne.getX()) > Math.abs(positionThree.getX()) ?
                 Math.abs(positionOne.getX()) : Math.abs(positionThree.getX());
         float maxX2 = Math.abs(positionTwo.getX()) > Math.abs(positionFour.getX()) ?
                 Math.abs(positionTwo.getX()) : Math.abs(positionFour.getX());
 
 
-
-
-
         float minY1 = Math.abs(positionOne.getY()) > Math.abs(positionThree.getY()) ?
                 Math.abs(positionThree.getY()) : Math.abs(positionOne.getY());
         float minY2 = Math.abs(positionTwo.getY()) > Math.abs(positionFour.getY()) ?
                 Math.abs(positionFour.getY()) : Math.abs(positionTwo.getY());
-
 
 
         float maxY1 = Math.abs(positionOne.getY()) > Math.abs(positionThree.getY()) ?
@@ -327,6 +328,31 @@ public class DrawSquareView extends FrameLayout implements OnDragTouchListener.O
         Log.d("LineView", "LineView rectY " + drawTriAngle.getY());
         System.out.println("LineView ");
 
+    }
+
+    int addValue = 20;
+
+    public void movingView(MotionEvent event) {
+        positionTwo.setX(event.getX());
+        positionTwo.setY(event.getY());
+        onDragging(positionTwo);
+        draw();
+        refresh();
+    }
+
+    public void setViewSize(float x, float y) {
+        positionTwo.setX(x - addValue);
+        positionTwo.setY(y - addValue);
+
+        positionOne.setX(x - addValue);
+        positionOne.setY(y + addValue);
+
+
+        positionFour.setX(x + addValue);
+        positionFour.setY(y - addValue);
+
+        positionThree.setX(x + addValue);
+        positionThree.setY(y + addValue);
     }
 
 

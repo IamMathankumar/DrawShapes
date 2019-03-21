@@ -1,13 +1,19 @@
+/*
+ * Created by Mathankumar K On 1/9/19 11:54 AM
+ * Copyright (c) Aximsoft 2019.
+ * All rights reserved.
+ */
+
 package com.aximsoft.triangle;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -18,28 +24,28 @@ public class ArcView extends View {
     PointF pointA = new PointF(0, 0);
     PointF pointB = new PointF(0, 0);
 
-    public ArcView(Context context) {
+    public ArcView(Context context, int color) {
         super(context);
-        initPaint();
+        initPaint(color);
     }
 
     public ArcView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initPaint();
+        initPaint(Color.GREEN);
     }
 
     public ArcView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initPaint();
+        initPaint(Color.GREEN);
     }
 
-    void initPaint() {
+    void initPaint(int color) {
         paint.setAntiAlias(true);
         paint.setDither(true);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(ContextCompat.getColor(getContext(), R.color.yellow));
+        paint.setColor(color);
 
     }
 

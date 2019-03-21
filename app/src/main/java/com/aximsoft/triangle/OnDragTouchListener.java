@@ -1,9 +1,16 @@
+/*
+ * Created by Mathankumar K On 1/9/19 11:54 AM
+ * Copyright (c) Aximsoft 2019.
+ * All rights reserved.
+ */
+
 package com.aximsoft.triangle;
 
 import android.annotation.SuppressLint;
 import android.view.MotionEvent;
 import android.view.View;
 
+@SuppressWarnings("unused")
 @SuppressLint("ClickableViewAccessibility")
 public class OnDragTouchListener implements View.OnTouchListener {
 

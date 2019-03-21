@@ -1,5 +1,12 @@
+/*
+ * Created by Mathankumar K On 1/9/19 11:54 AM
+ * Copyright (c) Aximsoft 2019.
+ * All rights reserved.
+ */
+
 package com.aximsoft.triangle;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -9,6 +16,8 @@ import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
 
+@SuppressLint("ViewConstructor")
+@SuppressWarnings("unused")
 public class FreeDrawView extends View {
 
     public int width;
@@ -21,16 +30,17 @@ public class FreeDrawView extends View {
     private Paint circlePaint;
     private Path circlePath;
     private Paint mPaint;
-    private int strokeSize = 10;
+    private boolean freeDrawProcessed = false;
+    FreeDrawListener freeDrawListener;
 
-    public FreeDrawView(Context c) {
+    public FreeDrawView(Context c, FreeDrawListener freeDrawListener, int lineColor) {
         super(c);
         context = c;
-        strokeSize = getResources().getDimensionPixelSize(R.dimen.drawLineWidth);
+        int strokeSize = getResources().getDimensionPixelSize(R.dimen.drawLineWidth);
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
-        mPaint.setColor(ContextCompat.getColor(getContext(),R.color.yellow));
+        mPaint.setColor(lineColor);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -41,14 +51,29 @@ public class FreeDrawView extends View {
         circlePaint = new Paint();
         circlePath = new Path();
         circlePaint.setAntiAlias(true);
-        circlePaint.setColor(ContextCompat.getColor(getContext(),R.color.orange));
+        circlePaint.setColor(ContextCompat.getColor(getContext(), R.color.orange));
         circlePaint.setStyle(Paint.Style.STROKE);
         circlePaint.setStrokeJoin(Paint.Join.MITER);
         circlePaint.setStrokeWidth(4f);
+        this.freeDrawListener = freeDrawListener;
     }
 
-    void setStrokeSize(int size){
+    public void setPaintColor(int color) {
+        mPaint.setColor(color);
+        draw();
+    }
+
+
+    public void setPaintColorResource(int resource) {
+        mPaint.setColor(resource);
+        draw();
+    }
+    void setStrokeSize(int size) {
         mPaint.setStrokeWidth(size);
+    }
+    public void draw() {
+        invalidate();
+        requestLayout();
     }
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -61,10 +86,11 @@ public class FreeDrawView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
-        canvas.drawPath(mPath, mPaint);
-        canvas.drawPath(circlePath, circlePaint);
+        if (null != mBitmap) {
+            canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+            canvas.drawPath(mPath, mPaint);
+            canvas.drawPath(circlePath, circlePaint);
+        }
     }
 
     private float mX, mY;
@@ -105,12 +131,17 @@ public class FreeDrawView extends View {
         this.freeDrawEnabled = freeDrawEnabled;
     }
 
-    public boolean isFreeDrawEnabled(){
+    public boolean isFreeDrawEnabled() {
         return freeDrawEnabled;
     }
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(freeDrawEnabled) {
+
+        if (freeDrawEnabled) {
+            freeDrawListener.freeDrawStarted();
+            freeDrawProcessed = true;
             float x = event.getX();
             float y = event.getY();
 
@@ -132,5 +163,14 @@ public class FreeDrawView extends View {
         }
         return false;
 
+    }
+
+    public boolean isFreeDrawProcessed() {
+        return freeDrawProcessed;
+    }
+
+
+    interface FreeDrawListener {
+        void freeDrawStarted();
     }
 }

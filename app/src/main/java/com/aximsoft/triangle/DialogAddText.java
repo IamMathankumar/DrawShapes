@@ -1,3 +1,9 @@
+/*
+ * Created by Mathankumar K On 1/9/19 11:54 AM
+ * Copyright (c) Aximsoft 2019.
+ * All rights reserved.
+ */
+
 package com.aximsoft.triangle;
 
 import android.app.Dialog;
@@ -27,7 +33,7 @@ public class DialogAddText extends Dialog implements
         // TODO Auto-generated constructor stub
     }
 
-    boolean update = false;
+    private boolean update = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +50,10 @@ public class DialogAddText extends Dialog implements
             update = true;
             editText.setText(text);
             editText.setSelection(editText.getText().length());
-            yes.setText("Update");
+            yes.setText(R.string.tri_update);
         } else {
             update = false;
-            yes.setText("Add");
+            yes.setText(R.string.tri_add);
         }
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -66,7 +72,7 @@ public class DialogAddText extends Dialog implements
 
             }
         });
-        setOnCancelListener(new DialogInterface.OnCancelListener() {
+        setOnCancelListener(new OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
                 // dialog dismiss without button press
@@ -92,7 +98,7 @@ public class DialogAddText extends Dialog implements
     }
 
 
-    void cancelled() {
+    private void cancelled() {
         if (!update)
             addTextListener.onCancel("");
         else
