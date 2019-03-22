@@ -40,12 +40,21 @@ public class CircleView extends View implements View.OnTouchListener, OnDragPinc
         init();
     }
 
-    public void movingView(MotionEvent event) {
-        width = (int) (event.getX() - startX);
-        height = (int) (event.getY() - startY);
+    public void movingView(float x, float y) {
+        width = (int) (x - startX);
+        height = (int) (y - startY);
         width = Math.abs(width);
-        height = Math.abs(width);
-        size = height / 2f - 5;
+        height = Math.abs(height);
+/*        System.out.println("Circle Width : "+ width);
+        System.out.println("Circle Height : "+ height);*/
+        if(width>=height) {
+            size = width / 2f - 5;
+            height = width;
+        }else{
+            size = height / 2f - 5;
+            width = height;
+        }
+
         invalidate();
     }
 
@@ -84,7 +93,7 @@ public class CircleView extends View implements View.OnTouchListener, OnDragPinc
     void init() {
         setOnTouchListener(this);
         mScaleGestureDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
-        drawPaint.setColor(ContextCompat.getColor(getContext(),R.color.yellow));
+        drawPaint.setColor(ContextCompat.getColor(getContext(), R.color.yellow));
         drawPaint.setStrokeWidth(10);
         drawPaint.setStyle(Paint.Style.STROKE);
         drawPaint.setAntiAlias(true);
@@ -109,10 +118,11 @@ public class CircleView extends View implements View.OnTouchListener, OnDragPinc
         x = getX();
         y = getY();
         canvas.save();
+
+        System.out.println("Circle Radius : "+ (height / 2f - 5));
+
         canvas.drawCircle(width / 2f, height / 2f, height / 2f - 5, drawPaint);
         canvas.restore();
-
-
     }
 
     private void setOnMeasureCallback() {
@@ -132,7 +142,6 @@ public class CircleView extends View implements View.OnTouchListener, OnDragPinc
     void draw() {
         width = (int) (size * mScaleFactor) * 2 + 10;
         height = (int) (size * mScaleFactor) * 2 + 10;
-        size = size * mScaleFactor;
     }
 
     @Override

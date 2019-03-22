@@ -56,9 +56,9 @@ public class DrawCircleView extends FrameLayout {
             circleSize = a.getDimensionPixelSize(R.styleable.LaneVisionDrawView_tri_circleSize, getResources().getDimensionPixelOffset(R.dimen.drawCircleWidth));
             lineWidthSize = a.getDimensionPixelSize(R.styleable.LaneVisionDrawView_tri_lineWidth, getResources().getDimensionPixelOffset(R.dimen.drawLineWidth));
             textSize = a.getDimensionPixelSize(R.styleable.LaneVisionDrawView_tri_angleTextSize, getResources().getDimensionPixelOffset(R.dimen.drawTextSize));
-            circleColor = a.getColor(R.styleable.LaneVisionDrawView_tri_circleColor, ContextCompat.getColor(getContext(),R.color.orange));
-            lineColor = a.getColor(R.styleable.LaneVisionDrawView_tri_lineColor, ContextCompat.getColor(getContext(),R.color.yellow));
-            textColor = a.getColor(R.styleable.LaneVisionDrawView_tri_angleTextColor, ContextCompat.getColor(getContext(),R.color.yellow));
+            circleColor = a.getColor(R.styleable.LaneVisionDrawView_tri_circleColor, ContextCompat.getColor(getContext(), R.color.orange));
+            lineColor = a.getColor(R.styleable.LaneVisionDrawView_tri_lineColor, ContextCompat.getColor(getContext(), R.color.yellow));
+            textColor = a.getColor(R.styleable.LaneVisionDrawView_tri_angleTextColor, ContextCompat.getColor(getContext(), R.color.yellow));
             drawCircle.setStrokeSize(lineWidthSize);
         } finally {
             a.recycle();
@@ -76,8 +76,8 @@ public class DrawCircleView extends FrameLayout {
     private void init(int circleColor, final float x, final float y) {
         lineWidthSize = getResources().getDimensionPixelOffset(R.dimen.drawLineWidth);
         this.circleColor = ContextCompat.getColor(getContext(), R.color.orange);
-        lineColor = ContextCompat.getColor(getContext(),R.color.yellow);
-        textColor = ContextCompat.getColor(getContext(),R.color.yellow);
+        lineColor = ContextCompat.getColor(getContext(), R.color.yellow);
+        textColor = ContextCompat.getColor(getContext(), R.color.yellow);
         LayoutInflater.from(getContext()).inflate(R.layout.draw_circle_view, this);
         parentView = findViewById(R.id.parentView);
         drawCircle = findViewById(R.id.drawCircle);
@@ -92,8 +92,8 @@ public class DrawCircleView extends FrameLayout {
         });
     }
 
-    public void movingView(MotionEvent event) {
-        drawCircle.movingView(event);
+    public void movingView(float x, float y) {
+        drawCircle.movingView(x,y);
 
     }
 

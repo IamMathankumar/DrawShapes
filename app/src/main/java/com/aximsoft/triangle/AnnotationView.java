@@ -14,7 +14,6 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,7 +21,7 @@ import android.widget.FrameLayout;
 
 @SuppressLint("ClickableViewAccessibility")
 
-public class AnnotationView extends FrameLayout implements View.OnDragListener, View.OnTouchListener {
+public class AnnotationView extends FrameLayout implements View.OnTouchListener {
     ConstraintLayout parentView;
     FreeDrawView freeDraw;
     boolean TextViewDialogInFront = false;
@@ -52,14 +51,12 @@ public class AnnotationView extends FrameLayout implements View.OnDragListener, 
         LayoutInflater.from(getContext()).inflate(R.layout.draw_annotation_view, this);
         parentView = findViewById(R.id.annotationParentView);
         // inside onCreate(), needs "implements View.OnDragListener"
-        parentView.setOnDragListener(this);
         parentView.setOnTouchListener(this);
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         Log.d("prefs", "X=" + String.valueOf(event.getX()) + " / Y=" + String.valueOf(event.getY()));
-
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             Log.e(TAG, "Down");
             addViewInOnTouch(event);
@@ -81,22 +78,6 @@ public class AnnotationView extends FrameLayout implements View.OnDragListener, 
         return false;
     }
 
-    @Override
-    public boolean onDrag(View v, DragEvent event) {
-        // Defines a variable to store the action type for the incoming event
-        final int action = event.getAction();
-
-        // Handles each of the expected events
-        switch (action) {
-            case DragEvent.ACTION_DRAG_LOCATION:
-                final float x = event.getX();
-                final float y = event.getY();
-                Log.d(TAG, "X=" + String.valueOf(x) + " / Y=" + String.valueOf(y));
-                break;
-        }
-        return true;
-    }
-
 
     public void changeFreeDrawColor(int color) {
         if (freeDraw != null)
@@ -116,21 +97,25 @@ public class AnnotationView extends FrameLayout implements View.OnDragListener, 
 
 
     public void onAddTriAngle(int color) {
+        freeDrawDisable();
         this.color = color;
         lastSelection = AnnotationEnum.TRIANGLE;
     }
 
     public void onAddSquare(int color) {
+        freeDrawDisable();
         this.color = color;
         lastSelection = AnnotationEnum.SQUARE;
     }
 
     public void onAddCircle(int color) {
+        freeDrawDisable();
         this.color = color;
         lastSelection = AnnotationEnum.CIRCLE;
     }
 
     public void onAddLine(int color) {
+        freeDrawDisable();
         this.color = color;
         lastSelection = AnnotationEnum.LINE;
     }
@@ -144,8 +129,10 @@ public class AnnotationView extends FrameLayout implements View.OnDragListener, 
 
 
     public void onAddText(int color) {
+        freeDrawDisable();
         this.color = color;
         lastSelection = AnnotationEnum.TEXT;
+
     }
 
 
@@ -172,6 +159,7 @@ public class AnnotationView extends FrameLayout implements View.OnDragListener, 
 
 
     public void onAddFreeDraw() {
+        checkFreeDrawProcessed();
         freeDraw = new FreeDrawView(getContext(), new FreeDrawView.FreeDrawListener() {
             @Override
             public void freeDrawStarted() {
@@ -294,6 +282,10 @@ public class AnnotationView extends FrameLayout implements View.OnDragListener, 
             case TRIANGLE:
                 onAddTriAngle(event);
                 break;
+            case TEXT:
+                onAddText(event);
+                break;
+
             default:
                 break;
         }
@@ -310,7 +302,7 @@ public class AnnotationView extends FrameLayout implements View.OnDragListener, 
                 break;
             case CIRCLE:
                 if (parentView.getChildAt(parentView.getChildCount() - 1) instanceof DrawCircleView) {
-                    ((DrawCircleView) parentView.getChildAt(parentView.getChildCount() - 1)).movingView(event);
+                    ((DrawCircleView) parentView.getChildAt(parentView.getChildCount() - 1)).movingView(event.getX(),event.getY());
                 }
                 break;
             case SQUARE:

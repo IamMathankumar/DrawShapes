@@ -69,9 +69,9 @@ public class DrawTriangleView extends FrameLayout implements OnDragTouchListener
             circleSize = a.getDimensionPixelSize(R.styleable.LaneVisionDrawView_tri_circleSize, getResources().getDimensionPixelOffset(R.dimen.drawCircleWidth));
             lineWidthSize = a.getDimensionPixelSize(R.styleable.LaneVisionDrawView_tri_lineWidth, getResources().getDimensionPixelOffset(R.dimen.drawLineWidth));
             textSize = a.getDimensionPixelSize(R.styleable.LaneVisionDrawView_tri_angleTextSize, getResources().getDimensionPixelOffset(R.dimen.drawTextSize));
-            circleColor = a.getColor(R.styleable.LaneVisionDrawView_tri_circleColor, ContextCompat.getColor(getContext(),R.color.orange));
-            lineColor = a.getColor(R.styleable.LaneVisionDrawView_tri_lineColor, ContextCompat.getColor(getContext(),R.color.yellow));
-            textColor = a.getColor(R.styleable.LaneVisionDrawView_tri_angleTextColor, ContextCompat.getColor(getContext(),R.color.yellow));
+            circleColor = a.getColor(R.styleable.LaneVisionDrawView_tri_circleColor, ContextCompat.getColor(getContext(), R.color.orange));
+            lineColor = a.getColor(R.styleable.LaneVisionDrawView_tri_lineColor, ContextCompat.getColor(getContext(), R.color.yellow));
+            textColor = a.getColor(R.styleable.LaneVisionDrawView_tri_angleTextColor, ContextCompat.getColor(getContext(), R.color.yellow));
 
             Drawable circleDrawable = a.getDrawable(R.styleable.LaneVisionDrawView_tri_circleDrawable);
 
@@ -208,7 +208,7 @@ public class DrawTriangleView extends FrameLayout implements OnDragTouchListener
         circleSize = getResources().getDimensionPixelOffset(R.dimen.drawCircleWidth);
         lineWidthSize = getResources().getDimensionPixelOffset(R.dimen.drawLineWidth);
         textSize = getResources().getDimensionPixelOffset(R.dimen.drawTextSize);
-        circleColor = ContextCompat.getColor(getContext(),R.color.orange);
+        circleColor = ContextCompat.getColor(getContext(), R.color.orange);
         this.lineColor = lineColor;
         textColor = lineColor;
 
