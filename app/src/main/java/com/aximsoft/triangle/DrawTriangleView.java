@@ -1,3 +1,9 @@
+/*
+ * Created by Mathankumar K On 1/9/19 11:54 AM
+ * Copyright (c) Aximsoft 2019.
+ * All rights reserved.
+ */
+
 package com.aximsoft.triangle;
 
 import android.annotation.SuppressLint;
@@ -22,6 +28,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+@SuppressWarnings("unused")
 @SuppressLint("ClickableViewAccessibility")
 public class DrawTriangleView extends FrameLayout implements OnDragTouchListener.OnDragActionListener {
 
@@ -35,10 +42,10 @@ public class DrawTriangleView extends FrameLayout implements OnDragTouchListener
     ArcView arcView;
 
 
-    public DrawTriangleView(Context context, View parent) {
+    public DrawTriangleView(Context context, View parent, int triangleColor, MotionEvent event) {
         super(context);
         this.parent = parent;
-        init();
+        init(triangleColor, event.getX(), event.getY());
     }
 
 
@@ -53,7 +60,7 @@ public class DrawTriangleView extends FrameLayout implements OnDragTouchListener
     int circleColor = Color.BLACK, lineColor = Color.GRAY, textColor = Color.BLACK;
 
     private void initView(Context context, AttributeSet attrs) {
-        init();
+        init(Color.GREEN, 0f, 0f);
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
                 R.styleable.LaneVisionDrawView,
@@ -62,9 +69,9 @@ public class DrawTriangleView extends FrameLayout implements OnDragTouchListener
             circleSize = a.getDimensionPixelSize(R.styleable.LaneVisionDrawView_tri_circleSize, getResources().getDimensionPixelOffset(R.dimen.drawCircleWidth));
             lineWidthSize = a.getDimensionPixelSize(R.styleable.LaneVisionDrawView_tri_lineWidth, getResources().getDimensionPixelOffset(R.dimen.drawLineWidth));
             textSize = a.getDimensionPixelSize(R.styleable.LaneVisionDrawView_tri_angleTextSize, getResources().getDimensionPixelOffset(R.dimen.drawTextSize));
-            circleColor = a.getColor(R.styleable.LaneVisionDrawView_tri_circleColor, ContextCompat.getColor(getContext(),R.color.orange));
-            lineColor = a.getColor(R.styleable.LaneVisionDrawView_tri_lineColor, ContextCompat.getColor(getContext(),R.color.yellow));
-            textColor = a.getColor(R.styleable.LaneVisionDrawView_tri_angleTextColor, ContextCompat.getColor(getContext(),R.color.yellow));
+            circleColor = a.getColor(R.styleable.LaneVisionDrawView_tri_circleColor, ContextCompat.getColor(getContext(), R.color.orange));
+            lineColor = a.getColor(R.styleable.LaneVisionDrawView_tri_lineColor, ContextCompat.getColor(getContext(), R.color.yellow));
+            textColor = a.getColor(R.styleable.LaneVisionDrawView_tri_angleTextColor, ContextCompat.getColor(getContext(), R.color.yellow));
 
             Drawable circleDrawable = a.getDrawable(R.styleable.LaneVisionDrawView_tri_circleDrawable);
 
@@ -86,9 +93,9 @@ public class DrawTriangleView extends FrameLayout implements OnDragTouchListener
     }
 
     public void setCircleImageTintColor(int circleColor) {
-     //   ImageViewCompat.setImageTintList(positionOne, ColorStateList.valueOf(circleColor));
-    //    ImageViewCompat.setImageTintList(positionTwo, ColorStateList.valueOf(circleColor));
-    //    ImageViewCompat.setImageTintList(positionThree, ColorStateList.valueOf(circleColor));
+        //   ImageViewCompat.setImageTintList(positionOne, ColorStateList.valueOf(circleColor));
+        //    ImageViewCompat.setImageTintList(positionTwo, ColorStateList.valueOf(circleColor));
+        //    ImageViewCompat.setImageTintList(positionThree, ColorStateList.valueOf(circleColor));
         requestLayout();
     }
 
@@ -197,14 +204,13 @@ public class DrawTriangleView extends FrameLayout implements OnDragTouchListener
         return new RectF(location[0], location[1], location[0] + view.getMeasuredWidth(), location[1] + view.getMeasuredHeight());
     }
 
-    private void init() {
+    private void init(final int lineColor, final float x, final float y) {
         circleSize = getResources().getDimensionPixelOffset(R.dimen.drawCircleWidth);
         lineWidthSize = getResources().getDimensionPixelOffset(R.dimen.drawLineWidth);
         textSize = getResources().getDimensionPixelOffset(R.dimen.drawTextSize);
-        circleColor = ContextCompat.getColor(getContext(),R.color.orange);
-        lineColor = ContextCompat.getColor(getContext(),R.color.yellow);
-        textColor = ContextCompat.getColor(getContext(),R.color.yellow);
-
+        circleColor = ContextCompat.getColor(getContext(), R.color.orange);
+        this.lineColor = lineColor;
+        textColor = lineColor;
 
 
         LayoutInflater.from(getContext()).inflate(R.layout.draw_triangle_view, this);
@@ -217,9 +223,12 @@ public class DrawTriangleView extends FrameLayout implements OnDragTouchListener
         showAngle = findViewById(R.id.showAngle);
         drawTriAngle = findViewById(R.id.drawTriAngle);
         arcView = findViewById(R.id.drawArc);
-
+        drawOne.setPaintColor(lineColor);
+        drawTwo.setPaintColor(lineColor);
+        drawOne.setPaintColor(lineColor);
+        arcView.setPaintColor(lineColor);
         setColorsAndSize();
-
+        setTextColor(lineColor);
 
         onDragTouchListenerOne = new OnDragTouchListener(positionOne, parent, this);
         onDragTouchListenerTwo = new OnDragTouchListener(positionTwo, this.parent, this);
@@ -235,11 +244,7 @@ public class DrawTriangleView extends FrameLayout implements OnDragTouchListener
         drawTriAngle.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                onDragTouchListenerOne.onTouch(positionOne, event);
-                onDragTouchListenerTwo.onTouch(positionTwo, event);
-                onDragTouchListenerThree.onTouch(positionThree, event);
-                onDragTouchListenerParent.onTouch(drawTriAngle, event);
-                draw();
+                movePosition(event);
                 return true;
             }
         });    // drawTwo.draw();
@@ -248,10 +253,50 @@ public class DrawTriangleView extends FrameLayout implements OnDragTouchListener
             @Override
             public void onGlobalLayout() {
                 positionOne.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                draw();
                 setColorsAndSize();
+                setColor(lineColor);
+                setViewSize(x, y);
+                draw();
             }
         });
+
+    }
+
+    int viewSize = 100;
+    int addValue = 200;
+
+    public void setViewSize(float x, float y) {
+
+
+        positionOne.setX(x);
+        positionOne.setY(y);
+
+        positionTwo.setX(x);
+        positionTwo.setY(y - addValue);
+
+
+        positionThree.setX(x + addValue);
+        positionThree.setY(y);
+
+        showAngle.setX(positionOne.getX() - 20);
+        showAngle.setY(positionOne.getY() - 20);
+
+       /* float xx = x + ((positionOne.getX() - positionThree.getX()) / 2);
+        float yy = y - ((positionOne.getY() - positionTwo.getY()) / 2);
+
+
+        drawTriAngle.setX(x - addValue);
+        drawTriAngle.setY(y - addValue);*/
+
+        draw();
+    }
+
+    public void movePosition(MotionEvent event) {
+        onDragTouchListenerOne.onTouch(positionOne, event);
+        onDragTouchListenerTwo.onTouch(positionTwo, event);
+        onDragTouchListenerThree.onTouch(positionThree, event);
+        onDragTouchListenerParent.onTouch(drawTriAngle, event);
+        draw();
 
     }
 
@@ -264,6 +309,15 @@ public class DrawTriangleView extends FrameLayout implements OnDragTouchListener
         setCircleImageTintColor(circleColor);
     }
 
+    public void setColor(int color) {
+        this.lineColor = color;
+        drawOne.setPaintColor(lineColor);
+        drawTwo.setPaintColor(lineColor);
+        drawOne.setPaintColor(lineColor);
+        arcView.setPaintColor(lineColor);
+        setColorsAndSize();
+        setTextColor(lineColor);
+    }
 
     private void draw() {
         drawOne.drawLine(positionOne.getX() + positionOne.getWidth() / 2,
@@ -370,6 +424,15 @@ public class DrawTriangleView extends FrameLayout implements OnDragTouchListener
         draw();
     }
 
-
+    void refresh() {
+        this.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                draw();
+                requestLayout();
+                invalidate();
+            }
+        }, 100);
+    }
 }
 

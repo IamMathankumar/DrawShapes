@@ -1,10 +1,15 @@
+/*
+ * Created by Mathankumar K On 1/9/19 11:54 AM
+ * Copyright (c) Aximsoft 2019.
+ * All rights reserved.
+ */
+
 package com.aximsoft.triangle;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,8 +19,6 @@ import android.view.ViewTreeObserver;
 
 public class CircleView extends View implements View.OnTouchListener, OnDragPinchTouchListener.OnDragActionListener {
 
-    private static final String COLOR_HEX = "#00000000";
-    private static final String COLOR_HEX_Stroke = "#E74300";
 
     private ScaleGestureDetector mScaleGestureDetector;
     private float mScaleFactor = 1.0f;
@@ -23,14 +26,13 @@ public class CircleView extends View implements View.OnTouchListener, OnDragPinc
     private float size = 15;
     OnDragPinchTouchListener listener;
     float x, y = 0f;
-
+    int width, height;
 
     View parent;
-    private int w;
-    private int h;
 
     long currentMillis = 0;
     boolean multiTOuch = false;
+    float startX = 0f, startY = 0f;
 
     public CircleView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
@@ -38,11 +40,39 @@ public class CircleView extends View implements View.OnTouchListener, OnDragPinc
         init();
     }
 
+    public void movingView(float x, float y) {
+        width = (int) (x - startX);
+        height = (int) (y - startY);
+        width = Math.abs(width);
+        height = Math.abs(height);
+/*        System.out.println("Circle Width : "+ width);
+        System.out.println("Circle Height : "+ height);*/
+        if(width>=height) {
+            size = width / 2f - 5;
+            height = width;
+        }else{
+            size = height / 2f - 5;
+            width = height;
+        }
+
+        invalidate();
+    }
+
+    void setXy(float x, float y) {
+        startX = x;
+        startY = y;
+        setXY();
+    }
+
+    private void setXY() {
+        setX(startX);
+        setY(startY);
+        invalidate();
+    }
 
     public void setSize(float size) {
         this.size = size;
     }
-
 
 
     public void setListener() {
@@ -63,12 +93,16 @@ public class CircleView extends View implements View.OnTouchListener, OnDragPinc
     void init() {
         setOnTouchListener(this);
         mScaleGestureDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
-        drawPaint.setColor(ContextCompat.getColor(getContext(),R.color.yellow));
+        drawPaint.setColor(ContextCompat.getColor(getContext(), R.color.yellow));
         drawPaint.setStrokeWidth(10);
         drawPaint.setStyle(Paint.Style.STROKE);
         drawPaint.setAntiAlias(true);
         setOnMeasureCallback();
 
+    }
+
+    void setCircleColor(int circleColor) {
+        drawPaint.setColor(circleColor);
     }
 
     void setStrokeSize(int size){
@@ -78,18 +112,17 @@ public class CircleView extends View implements View.OnTouchListener, OnDragPinc
     @Override
     protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
-
-
-        getLayoutParams().width = (int) (size * mScaleFactor) * 2 + 10;
-        getLayoutParams().height = (int) (size * mScaleFactor) * 2 + 10;
+        getLayoutParams().width = width;
+        getLayoutParams().height = height;
         requestLayout();
         x = getX();
         y = getY();
         canvas.save();
-        canvas.drawCircle(getWidth() / 2, getHeight() / 2, size * mScaleFactor, drawPaint);
+
+        System.out.println("Circle Radius : "+ (height / 2f - 5));
+
+        canvas.drawCircle(width / 2f, height / 2f, height / 2f - 5, drawPaint);
         canvas.restore();
-
-
     }
 
     private void setOnMeasureCallback() {
@@ -98,17 +131,23 @@ public class CircleView extends View implements View.OnTouchListener, OnDragPinc
             @Override
             public void onGlobalLayout() {
                 getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                size = 130;
+                size = 10;
                 setListener();
+                draw();
             }
         });
     }
 
 
+    void draw() {
+        width = (int) (size * mScaleFactor) * 2 + 10;
+        height = (int) (size * mScaleFactor) * 2 + 10;
+    }
+
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         // Get the index of the pointer associated with the action.
-        int action = MotionEventCompat.getActionMasked(motionEvent);
+        int action = motionEvent.getActionMasked();
         if (action == MotionEvent.ACTION_POINTER_DOWN)
             multiTOuch = true;
 
@@ -166,6 +205,7 @@ public class CircleView extends View implements View.OnTouchListener, OnDragPinc
             mScaleFactor *= scaleGestureDetector.getScaleFactor();
             mScaleFactor = Math.max(0.1f,
                     Math.min(mScaleFactor, 3.0f));
+            draw();
             invalidate();
             System.out.println("Helllooooo :" + mScaleFactor);
             return true;

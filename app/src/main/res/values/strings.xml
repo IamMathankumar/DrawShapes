@@ -1,4 +1,12 @@
+<!--
+  ~ Created by Mathankumar K On 1/9/19 11:54 AM
+  ~ Copyright (c) Aximsoft 2019.
+  ~ All rights reserved.
+  -->
+
 <resources>
     <string name="app_name">Triangle</string>
     <string name="position_one_to_drag">Position One to_Drag</string>
+    <string name="tri_add">Add</string>
+    <string name="tri_update">Update</string>
 </resources>

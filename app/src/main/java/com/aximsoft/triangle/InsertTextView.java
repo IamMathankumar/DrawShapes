@@ -1,13 +1,17 @@
+/*
+ * Created by Mathankumar K On 1/9/19 11:54 AM
+ * Copyright (c) Aximsoft 2019.
+ * All rights reserved.
+ */
+
 package com.aximsoft.triangle;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -27,57 +31,30 @@ public class InsertTextView extends FrameLayout implements OnDragPinchTouchListe
     View parent;
 
 
-    private static final String COLOR_HEX = "#00000000";
-    private static final String COLOR_HEX_Stroke = "#E74300";
 
     private ScaleGestureDetector mScaleGestureDetector;
-    private float mScaleFactor = 1.0f;
-    private float size = 15;
+
     OnDragPinchTouchListener listener;
-    float x, y = 0f;
 
-
-    private int w;
-    private int h;
 
     long currentMillis = 0;
     boolean multiTOuch = false;
 
 
-    public InsertTextView(Context context, View parent, InsertTextViewListener listener) {
+    public InsertTextView(Context context, View parent, int color) {
         super(context);
         this.parent = parent;
-        init();
-    }
-
-    public InsertTextView(Context context, View parent) {
-        super(context);
-        this.parent = parent;
-        init();
+        init(color);
     }
     public InsertTextView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initView(context, attrs);
+        init(Color.GREEN);
 
 
     }
 
-    int circleSize = 60, lineWidthSize = 10, textSize = 15;
-    int circleColor = Color.BLACK, lineColor = Color.GRAY, textColor = Color.BLACK;
 
-    private void initView(Context context, AttributeSet attrs) {
-        init();
-
-    }
-
-
-    public static RectF calculateRectOnScreen(View view) {
-        int[] location = new int[2];
-        view.getLocationOnScreen(location);
-        return new RectF(location[0], location[1], location[0] + view.getMeasuredWidth(), location[1] + view.getMeasuredHeight());
-    }
-
-    private void init() {
+    private void init(int color) {
         LayoutInflater.from(getContext()).inflate(R.layout.draw_insert_text_view, this);
         positionOne = findViewById(R.id.positionOne);
         parentView = findViewById(R.id.parentView);
@@ -93,7 +70,7 @@ public class InsertTextView extends FrameLayout implements OnDragPinchTouchListe
 
             }
         });
-
+        positionOne.setTextColor(color);
         DialogAddText cdd = new DialogAddText(getContext(), this, "");
         if (null != cdd.getWindow())
             cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -128,7 +105,7 @@ public class InsertTextView extends FrameLayout implements OnDragPinchTouchListe
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         // Get the index of the pointer associated with the action.
-        int action = MotionEventCompat.getActionMasked(motionEvent);
+        int action = motionEvent.getActionMasked();
         if (action == MotionEvent.ACTION_POINTER_DOWN)
             multiTOuch = true;
 

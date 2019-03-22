@@ -1,6 +1,13 @@
+/*
+ * Created by Mathankumar K On 1/9/19 11:54 AM
+ * Copyright (c) Aximsoft 2019.
+ * All rights reserved.
+ */
+
 package com.aximsoft.triangle;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -23,44 +30,44 @@ public class SubActivity extends AppCompatActivity {
         b_text =  findViewById(R.id.b_text);
         b_triAngle =   findViewById(R.id.b_triAngle);
         b_undo =   findViewById(R.id.b_undo);
-
+        final int color = Color.GREEN;
 
         b_line.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                parentView.onAddLine();
+                parentView.onAddLine(color);
             }
         });
         b_freeDraw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                parentView.onAddFreeDraw();
+                parentView.onAddFreeDraw(color);
             }
         });
         b_circle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                parentView.onAddCircle();
+                parentView.onAddCircle(color);
 
             }
         });
         b_square.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                parentView.onAddSquare();
+                parentView.onAddSquare(color);
 
             }
         });
         b_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                parentView.onAddText();
+                parentView.onAddText(color);
             }
         });
         b_triAngle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                parentView.onAddTriAngle();
+                parentView.onAddTriAngle(color);
             }
         });
         b_undo.setOnClickListener(new View.OnClickListener() {

@@ -1,3 +1,4 @@
+/*
 package com.aximsoft.triangle;
 
 import android.annotation.SuppressLint;
@@ -98,3 +99,4 @@ public class SubActivityCopy extends AppCompatActivity {
     }
 }
 
+*/

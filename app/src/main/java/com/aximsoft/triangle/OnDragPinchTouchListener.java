@@ -1,9 +1,16 @@
+/*
+ * Created by Mathankumar K On 1/9/19 11:54 AM
+ * Copyright (c) Aximsoft 2019.
+ * All rights reserved.
+ */
+
 package com.aximsoft.triangle;
 
 import android.annotation.SuppressLint;
 import android.view.MotionEvent;
 import android.view.View;
 
+@SuppressWarnings("unused")
 @SuppressLint("ClickableViewAccessibility")
 public class OnDragPinchTouchListener implements View.OnTouchListener {
 
@@ -101,7 +108,7 @@ public class OnDragPinchTouchListener implements View.OnTouchListener {
 
     private boolean multiTouch = true;
 
-    public void setMultiTouch(boolean val){
+    void setMultiTouch(boolean val){
         multiTouch = val;
     }
 

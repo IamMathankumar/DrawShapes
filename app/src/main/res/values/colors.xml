@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Mathankumar K On 1/9/19 11:54 AM
+  ~ Copyright (c) Aximsoft 2019.
+  ~ All rights reserved.
+  -->
+
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
